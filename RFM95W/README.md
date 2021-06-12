@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guideline is based on excellent article: 
+This guideline is based on excellent article from Sandeep Mistry: 
 [Connect Your Adafruit Feather RP2040 to The Things Network](https://www.hackster.io/sandeep-mistry/connect-your-adafruit-feather-rp2040-to-the-things-network-5c0c84)
 
 The difference from this article is to provide guideline for:
@@ -21,3 +21,25 @@ git clone --recurse-submodules https://github.com/sandeepmistry/pico-lorawan.git
 cd pico-lorawan
 mkdir build && cd build && cmake -DPICO_SDK_PATH=~/pico/pico-sdk -DCMAKE_BUILD_TYPE=Debug -DPICO_BOARD=pico .. && make -j4
 ```
+
+## Get Dev EUI
+
+Raspberry Pi Pico with HOPERF Module with RFM95W doesn't have DevEUI allocated.
+You need to get DevEUI from Raspberry Pi Pico board via. unique id of the board.
+
+Upload example application "default_dev_eui" which can do this and connect terminal to see the result.
+
+I use SWD interface and openocd tool to upload applications into Raspberry Pi Pico.
+
+```
+openocd -f interface/raspberrypi-swd.cfg -f target/rp2040.cfg -c "program  examples/default_dev_eui/pico_lorawan_default_dev_eui.elf verify reset exit"
+
+minicom -b 115200 -o -D /dev/ttyACM0
+```
+
+In my case the result is:
+```
+DevEUI:E6605838XXXXXXXX
+```
+
+Note: Value 'XXXXXXXX' was redacted to not show complete identifier of the board.
