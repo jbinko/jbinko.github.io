@@ -130,3 +130,30 @@ Note: Value 'XXXXXXXX' was redacted to not show complete identifier.
 Now the device has been added. You will need values of fields AppEUI/JoinEUI, DevEUI and AppKey later.
 
 ![Join Settings](Images/IMG006.jpg)
+
+## Configure Apps Settings
+
+In all config.h files where applicable, change value from
+```
+#define LORAWAN_DEVICE_EUI      "0000000000000000"
+```
+to
+```
+#define LORAWAN_DEVICE_EUI      NULL
+```
+
+For define JoinEUI/AppEUI keep all zeroes - no change.
+
+Change AppKey from zeroes to obtained AppKey.
+In my case:
+```
+#define LORAWAN_APP_KEY         "F8A1A05817XXXXXXXXXXXXXXXXXXXXXX"
+```
+
+Note: Value 'XXXXXXXX' was redacted to not show complete identifier.
+
+If you want to enable debug messages, change/uncomment in main.c files
+```
+// uncomment next line to enable debug
+lorawan_debug(true);
+```
