@@ -157,3 +157,47 @@ If you want to enable debug messages, change/uncomment in main.c files
 // uncomment next line to enable debug
 lorawan_debug(true);
 ```
+
+## Rebuild
+
+Now it's time to rebuild with fresh configuration options.
+Remove old build directory.
+```
+rm -rf build
+```
+
+and build again with
+
+```
+mkdir build && cd build && cmake -DPICO_SDK_PATH=~/pico/pico-sdk -DCMAKE_BUILD_TYPE=Debug -DPICO_BOARD=pico .. && make -j4
+```
+
+upload the latest version of an application with
+
+```
+openocd -f interface/raspberrypi-swd.cfg -f target/rp2040.cfg -c "program  examples/otaa_temperature_led/pico_lorawan_otaa_temperature_led.elf verify reset exit"
+```
+
+and see debug messages with
+
+```
+minicom -b 115200 -o -D /dev/ttyACM0
+```
+
+Here is my output in my terminal window.
+
+```
+Pico LoRaWAN - OTAA - Temperature + LED
+
+Initilizating LoRaWAN ... DevEui      : E6-60-58-38-XX-XX-XX-XX
+JoinEui     : 3B-3A-01-10-XX-XX-XX-XX
+Pin         : 00-00-00-00
+
+success!
+Joining LoRaWAN network ...
+###### =========== MLME-Request ============ ######
+######               MLME_JOIN               ######
+###### ===================================== ######
+STATUS      : OK
+.......
+```
