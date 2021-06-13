@@ -4,6 +4,8 @@
 
 This guideline is based on excellent article from Sandeep Mistry: 
 [Connect Your Adafruit Feather RP2040 to The Things Network](https://www.hackster.io/sandeep-mistry/connect-your-adafruit-feather-rp2040-to-the-things-network-5c0c84)
+and another one from Alasdair Allan
+[How to add LoRaWAN to Raspberry Pi Pico](https://www.raspberrypi.org/blog/how-to-add-lorawan-to-raspberry-pi-pico/)
 
 The difference from this article is to provide guideline for:
 
