@@ -1,4 +1,4 @@
-# LoRaWAN, Raspberry Pi Pico, HOPERF Module RFM95W, The Things Network
+# LoRaWAN, Raspberry Pi Pico, HOPERF Module RFM95W, The Things Network V3
 
 ## Overview
 
@@ -10,7 +10,7 @@ The difference from this article is to provide guideline for:
 - European region
 - HOPERF Module based on RFM95W - I'm happy owner of [RFM95W-868-S2_BOB](https://www.soselectronic.com/products/various/rfm95w-868-s2-bob-342652)
 
-Goal is to provide guideline how to make all those components working Together in European region with The Things Network.
+Goal is to provide guideline how to make all those components work Together in European region with The Things Network.
 
 ## Source code and Build
 
@@ -18,6 +18,28 @@ I'm assuming you have Raspberry Pi Pico C/C++ SDK installed. In my case I have i
 
 ```
 git clone --recurse-submodules https://github.com/sandeepmistry/pico-lorawan.git
+```
+
+Do few changes in the source code to support European region.
+In Examples directory change in all three config.h files values from
+```
+#define LORAWAN_REGION                  LORAMAC_REGION_US915
+```
+to
+```
+#define LORAWAN_REGION                  LORAMAC_REGION_EU868
+```
+
+In the root directory change the CMakeLists.txt file value from
+```
+target_compile_definitions(pico_loramac_node INTERFACE -DACTIVE_REGION=LORAMAC_REGION_US915)
+```
+to
+```
+target_compile_definitions(pico_loramac_node INTERFACE -DACTIVE_REGION=LORAMAC_REGION_EU868)
+```
+
+```
 cd pico-lorawan
 mkdir build && cd build && cmake -DPICO_SDK_PATH=~/pico/pico-sdk -DCMAKE_BUILD_TYPE=Debug -DPICO_BOARD=pico .. && make -j4
 ```
@@ -43,3 +65,22 @@ DevEUI:E6605838XXXXXXXX
 ```
 
 Note: Value 'XXXXXXXX' was redacted to not show complete identifier of the board.
+
+## Wiring
+
+HOPERF Module Pin Name | Raspberry Pi Pico GPIO | Raspberry Pi Pico Pin Number
+--- | --- | ---
+VCC 3.3V * | X | 36
+GND ** | X | 38
+DI01 | GPIO 10 | 14
+DI00 | GPIO 7 | 10
+MISO | GPIO 16 | 21
+MOSI | GPIO 19 | 25
+SCK | GPIO 18 | 24
+nSS | GPIO 8 | 11
+RST | GPIO 9 | 12
+
+VCC 3.3V * - The last bottom pin at the right side from antenna when antenna is oriented at the top side.
+GND ** - The last top pin at the right side from antenna when antenna is oriented at the top side.
+
+For more details see [HopeRF RFM95 breakout pinout](https://reuben.honigwachs.de/post/rfm95-breakout-board/)
