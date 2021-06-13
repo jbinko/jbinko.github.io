@@ -7,7 +7,7 @@ This guideline is based on excellent article from Sandeep Mistry:
 and another one from Alasdair Allan
 [How to add LoRaWAN to Raspberry Pi Pico](https://www.raspberrypi.org/blog/how-to-add-lorawan-to-raspberry-pi-pico/)
 
-The difference from this article is to provide guideline for:
+The difference from those articles is to provide guideline for:
 
 - European region
 - HOPERF Module based on RFM95W - I'm happy owner of [RFM95W-868-S2_BOB](https://www.soselectronic.com/products/various/rfm95w-868-s2-bob-342652)
@@ -41,6 +41,8 @@ to
 target_compile_definitions(pico_loramac_node INTERFACE -DACTIVE_REGION=LORAMAC_REGION_EU868)
 ```
 
+and build with:
+
 ```
 cd pico-lorawan
 mkdir build && cd build && cmake -DPICO_SDK_PATH=~/pico/pico-sdk -DCMAKE_BUILD_TYPE=Debug -DPICO_BOARD=pico .. && make -j4
@@ -72,8 +74,8 @@ Note: Value 'XXXXXXXX' was redacted to not show complete identifier of the board
 
 HOPERF Module Pin Name | Raspberry Pi Pico GPIO | Raspberry Pi Pico Pin Number
 --- | --- | ---
-VCC 3.3V * | X | 36
-GND ** | X | 38
+VCC 3.3V * | 3v3(OUT) | 36
+GND ** | GND | 38
 DI01 | GPIO 10 | 14
 DI00 | GPIO 7 | 10
 MISO | GPIO 16 | 21
