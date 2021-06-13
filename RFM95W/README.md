@@ -85,6 +85,48 @@ nSS | GPIO 8 | 11
 RST | GPIO 9 | 12
 
 VCC 3.3V * - The last bottom pin at the right side from antenna when antenna is oriented at the top side.
+
 GND ** - The last top pin at the right side from antenna when antenna is oriented at the top side.
 
 For more details see [HopeRF RFM95 breakout pinout](https://reuben.honigwachs.de/post/rfm95-breakout-board/)
+
+## The Things Network Device Enrollment
+
+I'm assuming you are familiar with The Things Network and you have an account which you can use.
+
+Go to the [The Things Stack Community Edition Console](https://console.cloud.thethings.network/) and select Europe 1 region.
+After logging in go to the applications.
+
+Click "Add Application", specify some application ID and hit "Create Application".
+
+![Add Application](Images/IMG001.jpg)
+
+Next, click "Add end device", select tab "Manually", keep option "Over the air activation (OTAA)",
+select "MAC V1.0.2" as the LoRaWAN Version.
+Click "Start".
+
+![Add end device](Images/IMG002.jpg)
+
+Next, name the device somehow ("End device ID" field).
+Click "00" button next to the AppEUI field.
+and use your DevEUI you obtained from "default_dev_eui" app.
+Hit "Network layer settings" button.
+
+![Basic Settings](Images/IMG003.jpg)
+
+Next, select the "Europe 863-870 MHz (SF12 for RX2)" as a frequency plan and the "Regional Parameters version" set to "PHY V1.0.2 REV A".
+Then click the "Join settings" button.
+
+![Network Layer Settings](Images/IMG004.jpg)
+
+Next, Click the button next to the AppKey to generate an AppKey, then click the "Add end device" button.
+
+![Join Settings](Images/IMG005.jpg)
+
+This generated AppKey: F8A1A05817XXXXXXXXXXXXXXXXXXXXXX for me.
+
+Note: Value 'XXXXXXXX' was redacted to not show complete identifier.
+
+Now the device has been added. You will need values of fields AppEUI/JoinEUI, DevEUI and AppKey later.
+
+![Join Settings](Images/IMG006.jpg)
