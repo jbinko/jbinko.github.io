@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Photography</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-tertiary: #1a1a1a;
+      --text-primary: #fafafa;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+      --accent: #c9a962;
+      --border: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      padding: 80px 40px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .tagline {
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 30px 40px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+
+    .nav-link {
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    /* Collection/Chapter */
+    .collection {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 80px;
+    }
+
+    .collection:last-child {
+      border-bottom: none;
+    }
+
+    .collection-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 50px;
+      cursor: pointer;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .collection-info {
+      flex: 1;
+    }
+
+    .collection-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .collection-meta {
+      display: flex;
+      gap: 30px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .collection-toggle {
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .collection-toggle:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+
+    .collection.collapsed .collection-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .collection.collapsed .gallery {
+      display: none;
+    }
+
+    /* Gallery Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 3px;
+    }
+
+    .photo {
+      position: relative;
+      aspect-ratio: 3/2;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg-secondary);
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                  filter 0.5s ease;
+      filter: grayscale(15%) contrast(1.05);
+    }
+
+    .photo:hover img {
+      transform: scale(1.03);
+      filter: grayscale(0%) contrast(1);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.7) 0%,
+        rgba(0,0,0,0) 40%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 30px;
+    }
+
+    .photo:hover .photo-overlay {
+      opacity: 1;
+    }
+
+    .photo-caption {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .photo-location {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.98);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+    }
+
+    .lightbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lightbox-counter {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+    }
+
+    .lightbox-close {
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-close:hover {
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+    }
+
+    .lightbox-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 40px;
+    }
+
+    .lightbox-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-nav:hover {
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .lightbox-prev { left: 40px; }
+    .lightbox-next { right: 40px; }
+
+    .lightbox-footer {
+      padding: 30px 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .lightbox-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .lightbox-subtitle {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 40px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .lightbox-nav {
+        width: 50px;
+        height: 50px;
+      }
+      .lightbox-prev { left: 20px; }
+      .lightbox-next { right: 20px; }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 50px 20px 40px; }
+      .logo { font-size: 2rem; }
+      .nav { padding: 20px; gap: 4px; }
+      .nav-link { padding: 10px 16px; font-size: 0.7rem; }
+      .collection { padding: 50px 20px; }
+      .collection-title { font-size: 1.6rem; }
+      .collection-meta { flex-direction: column; gap: 8px; }
+      .gallery { grid-template-columns: 1fr; gap: 2px; }
+      .lightbox-nav { display: none; }
+      .lightbox-header, .lightbox-footer { padding: 20px; }
+      .lightbox-body { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">Travel Photography</h1>
+    <p class="tagline">Exploring the world through the lens</p>
+  </header>
+
+  <nav class="nav" id="nav"></nav>
+  <main id="collections"></main>
+
+  <footer>
+    <p class="footer-text">Jiri Binko &copy; 2026</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-header">
+      <span class="lightbox-counter" id="lightbox-counter"></span>
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    </div>
+    <div class="lightbox-body" onclick="event.stopPropagation()">
+      <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">&#8592;</button>
+      <img class="lightbox-image" id="lightbox-img" src="" alt="">
+      <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">&#8594;</button>
+    </div>
+    <div class="lightbox-footer">
+      <h3 class="lightbox-title" id="lightbox-title"></h3>
+      <p class="lightbox-subtitle" id="lightbox-subtitle"></p>
+    </div>
+  </div>
+
+  <script>
+    // =============================================
+    // ADD YOUR COLLECTIONS HERE
+    // =============================================
+    const travels = [
+      {
+        id: 'Thailand-2026',
+        title: 'Thailand-2026',
+        location: 'Koh Jum, Koh Lanta, Railey Beach, Ao Nang, Emerald Pool, Tiger Cave, Elephant House Sanctuary',
+        date: 'Spring 2026',
+        photos: [
+          { src: 'photos/IMG_8424.JPG', caption: 'Beach', location: 'Koh Jum, Thailand' },
+          { src: 'photos/IMG_8448.JPG', caption: 'House', location: 'Koh Jum, Thailand' },
+          { src: 'photos/IMG_8472.JPG', caption: 'Water', location: 'Koh Jum, Thailand' },
+          { src: 'photos/IMG_8520.JPG', caption: 'Long Tail Boat', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8523.JPG', caption: 'Railey', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8532.JPG', caption: 'Hotel View I', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8536.JPG', caption: 'Hotel View II', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8569.JPG', caption: 'Railey Beach I', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8586.JPG', caption: 'Railey Beach II', location: 'Railey Beach, Thailand' },
+          { src: 'photos/IMG_8664.JPG', caption: 'River', location: 'Emerald Pool, Thailand' },
+          { src: 'photos/IMG_8680.JPG', caption: 'Blue Pool', location: 'Emerald Pool, Thailand' },
+          { src: 'photos/IMG_8693.JPG', caption: 'Emerald Pool', location: 'Emerald Pool, Thailand' },
+          { src: 'photos/IMG_8711.JPG', caption: 'Temple', location: 'Tiger Cave, Thailand' },
+          { src: 'photos/IMG_8729.JPG', caption: 'Temple - Inside I', location: 'Tiger Cave, Thailand' },
+          { src: 'photos/IMG_8734.JPG', caption: 'Temple - Inside II', location: 'Tiger Cave, Thailand' },
+          { src: 'photos/IMG_8796.JPG', caption: 'Elephant', location: 'Elephant House Sanctuary, Thailand' },
+        ]
+      },
+    ];
+
+    // Build flat photos array
+    let allPhotos = [];
+    travels.forEach(travel => {
+      travel.photos.forEach(photo => {
+        allPhotos.push({ ...photo, collection: travel.title });
+      });
+    });
+
+    // Generate Navigation
+    const nav = document.getElementById('nav');
+    travels.forEach(travel => {
+      nav.innerHTML += `<a href="#${travel.id}" class="nav-link">${travel.title}</a>`;
+    });
+
+    // Generate Collections
+    const collectionsEl = document.getElementById('collections');
+    let photoIndex = 0;
+    travels.forEach(travel => {
+      let galleryHTML = '';
+      travel.photos.forEach(photo => {
+        galleryHTML += `
+          <div class="photo" onclick="openLightbox(${photoIndex++})">
+            <img src="${photo.src}" alt="${photo.caption}" loading="lazy">
+            <div class="photo-overlay">
+              <span class="photo-caption">${photo.caption}</span>
+              <span class="photo-location">${photo.location || ''}</span>
+            </div>
+          </div>`;
+      });
+
+      collectionsEl.innerHTML += `
+        <section class="collection" id="${travel.id}">
+          <div class="collection-header" onclick="toggleCollection(this)">
+            <div class="collection-info">
+              <h2 class="collection-title">${travel.title}</h2>
+              <div class="collection-meta">
+                <span>${travel.location}</span>
+                <span>${travel.date}</span>
+                <span>${travel.photos.length} Photographs</span>
+              </div>
+            </div>
+            <button class="collection-toggle">&#9662;</button>
+          </div>
+          <div class="gallery">${galleryHTML}</div>
+        </section>`;
+    });
+
+    function toggleCollection(header) {
+      header.parentElement.classList.toggle('collapsed');
+    }
+
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightbox();
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      currentIndex = (currentIndex + direction + allPhotos.length) % allPhotos.length;
+      updateLightbox();
+    }
+
+    function updateLightbox() {
+      const photo = allPhotos[currentIndex];
+      document.getElementById('lightbox-img').src = photo.src;
+      document.getElementById('lightbox-title').textContent = photo.caption;
+      document.getElementById('lightbox-subtitle').textContent = 
+        `${photo.location || ''} ${photo.location ? '—' : ''} ${photo.collection}`;
+      document.getElementById('lightbox-counter').textContent = 
+        `${currentIndex + 1} / ${allPhotos.length}`;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const lightbox = document.getElementById('lightbox');
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+  </script>
+</body>
+</html>
