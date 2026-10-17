@@ -3,3 +3,5 @@ author: Jiri Binko
 description: Cloud Architecture, Azure and AI
 
 markdown: kramdown
+kramdown:
+  input: GFM
